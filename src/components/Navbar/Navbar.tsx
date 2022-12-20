@@ -1,12 +1,26 @@
 import { Flex, Image } from "@chakra-ui/react";
 import React from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { autenticacaoFirebase } from "../../firebase/clientApp";
 import ConteudoDireita from "./ConteudoDireita/ConteudoDireita";
+import Diretorio from "./Diretorio/Diretorio";
 import InputBusca from "./InputBusca";
 
 const Navbar: React.FC = () => {
+  const [user, loading, error] = useAuthState(autenticacaoFirebase);
+
   return (
-    <Flex bg="white" height="44px" padding="6px 12px">
-      <Flex align="center">
+    <Flex
+      bg="white"
+      height="44px"
+      padding="6px 12px"
+      justify={{ md: "space-between" }}
+    >
+      <Flex
+        align="center"
+        width={{ base: "40px", md: "auto" }}
+        mr={{ base: 0, md: 2 }}
+      >
         <Image src="/imgs/redditFace.svg" height="30px" />
         <Image
           src="/imgs/redditText.svg"
@@ -14,8 +28,9 @@ const Navbar: React.FC = () => {
           display={{ base: "none", md: "unset" }}
         />
       </Flex>
-      <InputBusca />
-      <ConteudoDireita />
+      {user && <Diretorio />}
+      <InputBusca user={user} />
+      <ConteudoDireita user={user} />
     </Flex>
   );
 };

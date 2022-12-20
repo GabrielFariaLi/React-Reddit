@@ -33,6 +33,7 @@ const Login: React.FC<LoginProps> = () => {
       [event.target.name]: event.target.value,
     }));
   };
+
   return (
     <form onSubmit={onSubmit}>
       <Input
@@ -98,6 +99,24 @@ const Login: React.FC<LoginProps> = () => {
       >
         Log in
       </Button>
+      <Flex justifyContent="center" mb={2}>
+        <Text fontSize="9pt" mr={1}>
+          Esqueceu sua senha
+        </Text>
+        <Text
+          fontSize="9pt"
+          color="blue.500"
+          cursor="pointer"
+          onClick={() =>
+            setAutenticaoModalState((prev) => ({
+              ...prev,
+              view: "resetPassword",
+            }))
+          }
+        >
+          Recuperar
+        </Text>
+      </Flex>
       <Flex fontSize="9pt" justifyContent="center">
         <Text mr={1}>Novo por aqui?</Text>
         <Text

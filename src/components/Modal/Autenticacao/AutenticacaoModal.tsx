@@ -11,14 +11,18 @@ import {
   Text,
   Flex,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useRecoilState } from "recoil";
 import { autenticacaoModalState } from "../../../atoms/autenticacaoModalAtom";
+import { autenticacaoFirebase } from "../../../firebase/clientApp";
 import AutenticacaoInputs from "./AutenticacaoInputs";
 import OAuthButtons from "./OAuthButtons";
+import RecuperarSenha from "./RecuperarSenha";
 
 const AutenticacaoModal: React.FC = () => {
   const [modalState, setModalState] = useRecoilState(autenticacaoModalState);
+  const [user, loading, error] = useAuthState(autenticacaoFirebase);
 
   const handleClose = () => {
     setModalState((prev) => ({
@@ -26,6 +30,10 @@ const AutenticacaoModal: React.FC = () => {
       open: false,
     }));
   };
+
+  useEffect(() => {
+    if (user) handleClose();
+  }, [user]);
   return (
     <>
       <Modal isOpen={modalState.open} onClose={handleClose}>
@@ -50,13 +58,19 @@ const AutenticacaoModal: React.FC = () => {
               justify="center"
               width="70%"
             >
-              <OAuthButtons />
-              <Text color="gray.500" fontWeight={700}>
-                {" "}
-                OU
-              </Text>
-              <AutenticacaoInputs />
-              {/* Reset password */}
+              {modalState.view === "login" ||
+              modalState.view === "registrar" ? (
+                <>
+                  <OAuthButtons />
+                  <Text color="gray.500" fontWeight={700}>
+                    {" "}
+                    OU
+                  </Text>
+                  <AutenticacaoInputs />
+                </>
+              ) : (
+                <RecuperarSenha />
+              )}
             </Flex>
           </ModalBody>
         </ModalContent>
