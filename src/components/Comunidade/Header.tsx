@@ -9,7 +9,8 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = (props) => {
-  const { comunidadeStateValue, onJoinOrLeaveComunidade } = useComunidadeData();
+  const { comunidadeStateValue, onJoinOrLeaveComunidade, loading } =
+    useComunidadeData();
   const isJoined = !!comunidadeStateValue.mySnippets.find(
     (item) => item.comunidadeId === props.comunidadeData.id
   );
@@ -45,6 +46,7 @@ const Header: React.FC<HeaderProps> = (props) => {
               height={"30px"}
               pr={6}
               pl={6}
+              isLoading={loading}
               onClick={() =>
                 onJoinOrLeaveComunidade(props.comunidadeData, isJoined)
               }

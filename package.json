@@ -20,6 +20,7 @@
     "@types/react-dom": "18.0.9",
     "firebase": "^9.15.0",
     "framer-motion": "^6.5.1",
+    "moment": "^2.29.4",
     "next": "13.0.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",

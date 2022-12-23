@@ -87,6 +87,7 @@ const CriarComunidadeModal: React.FC<CriarComunidadeModalProps> = (props) => {
           creatorId: user?.uid,
           createdAt: serverTimestamp(),
           numberOfMembers: 1,
+          imageURL: "",
           privacyType: tipoComunidade,
         });
 
@@ -129,7 +130,6 @@ const CriarComunidadeModal: React.FC<CriarComunidadeModalProps> = (props) => {
               flexDirection={"column"}
               padding="10px 0px"
             >
-              Modal body aq
               <Text fontWeight={600} fontSize={15}>
                 Nome
               </Text>

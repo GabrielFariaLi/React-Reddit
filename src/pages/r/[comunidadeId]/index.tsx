@@ -1,12 +1,16 @@
 import { doc, getDoc } from "firebase/firestore";
 import { GetServerSidePropsContext } from "next";
-import React from "react";
-import { Comunidade } from "../../../atoms/comunidadesAtom";
+import React, { useEffect } from "react";
+import { Comunidade, comunidadeState } from "../../../atoms/comunidadesAtom";
 import { firestore } from "../../../firebase/clientApp";
 import safeJsonStringify from "safe-json-stringify";
 import ComunidadeNotFound from "../../../components/Comunidade/ComunidadeNotFound";
 import Header from "../../../components/Comunidade/Header";
 import ConteudoPagina from "../../../components/Layout/ConteudoPagina";
+import LinkCriarPostComunidade from "../../../components/Comunidade/LinkCriarPostComunidade";
+import Posts from "../../../components/Posts/Posts";
+import { useSetRecoilState } from "recoil";
+import SobreComunidade from "../../../components/Comunidade/SobreComunidade";
 
 type PaginaComunidadeProps = {
   comunidadeData: Comunidade;
@@ -14,19 +18,27 @@ type PaginaComunidadeProps = {
 
 const PaginaComunidade: React.FC<PaginaComunidadeProps> = (props) => {
   console.log("data aq", props.comunidadeData);
-
+  const setComunidadeStateValue = useSetRecoilState(comunidadeState);
   if (!props.comunidadeData) {
     return <ComunidadeNotFound />;
   }
+
+  useEffect(() => {
+    setComunidadeStateValue((prev) => ({
+      ...prev,
+      comunidadeAtual: props.comunidadeData,
+    }));
+  }, []);
   return (
     <>
       <Header comunidadeData={props.comunidadeData} />
       <ConteudoPagina>
         <>
-          <div>ESQUERDA</div>
+          <LinkCriarPostComunidade />
+          <Posts comunidadeData={props.comunidadeData} />
         </>
         <>
-          <div>DIREITA</div>
+          <SobreComunidade comunidadeData={props.comunidadeData} />
         </>
       </ConteudoPagina>
     </>

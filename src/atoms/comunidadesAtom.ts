@@ -10,17 +10,17 @@ export interface Comunidade {
   imageURL?: string;
 }
 
-interface SnippetComunidade {
+export interface SnippetComunidade {
   comunidadeId: string;
   isModerator?: boolean;
   imageURL?: string;
 }
 interface ComunidadeState {
   mySnippets: SnippetComunidade[];
-  // visitedComunidades
+  comunidadeAtual?: Comunidade;
 }
 
-const defaultComunidadeState: ComunidadeState = {
+export const defaultComunidadeState: ComunidadeState = {
   mySnippets: [],
 };
 
