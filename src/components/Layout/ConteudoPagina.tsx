@@ -1,7 +1,9 @@
 import { Flex } from "@chakra-ui/react";
 import React from "react";
 
-type ConteudoPaginaProps = {};
+type ConteudoPaginaProps = {
+  children?: any;
+};
 
 const ConteudoPagina: React.FC<ConteudoPaginaProps> = ({ children }) => {
   //console.log("here is children ", children);

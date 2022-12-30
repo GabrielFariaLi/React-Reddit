@@ -19,9 +19,6 @@ type PaginaComunidadeProps = {
 const PaginaComunidade: React.FC<PaginaComunidadeProps> = (props) => {
   console.log("data aq", props.comunidadeData);
   const setComunidadeStateValue = useSetRecoilState(comunidadeState);
-  if (!props.comunidadeData) {
-    return <ComunidadeNotFound />;
-  }
 
   useEffect(() => {
     setComunidadeStateValue((prev) => ({
@@ -29,6 +26,10 @@ const PaginaComunidade: React.FC<PaginaComunidadeProps> = (props) => {
       comunidadeAtual: props.comunidadeData,
     }));
   }, [props.comunidadeData]);
+
+  if (!props.comunidadeData) {
+    return <ComunidadeNotFound />;
+  }
   return (
     <>
       <Header comunidadeData={props.comunidadeData} />
