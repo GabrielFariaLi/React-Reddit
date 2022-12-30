@@ -75,22 +75,21 @@ const FormCriarPost: React.FC<FormCriarPostProps> = (props) => {
   const handleCriarPost = async () => {
     // criar novo post object
     const { comunidadeId } = router.query;
-    const novoPost: Post = {
-      comunidadeImagemURL: props.comunidadeImagemURL || "",
-      comunidadeId: comunidadeId as string,
-      criadorId: props.user?.uid,
-      criadorDisplayName: props.user.email!.split("@")[0],
-      titulo: textInputs.titulo,
-      body: textInputs.body,
-      numberOfComments: 0,
-      voteStatus: 0,
-      createdAt: serverTimestamp() as Timestamp,
-    };
     setLoading(true);
 
     try {
       // guardar na firebase
-      const postDocRef = await addDoc(collection(firestore, "posts"), novoPost);
+      const postDocRef = await addDoc(collection(firestore, "posts"), {
+        comunidadeImagemURL: props.comunidadeImagemURL || "",
+        comunidadeId: comunidadeId as string,
+        criadorId: props.user?.uid,
+        criadorDisplayName: props.user.email!.split("@")[0],
+        titulo: textInputs.titulo,
+        body: textInputs.body,
+        numberOfComments: 0,
+        voteStatus: 0,
+        createdAt: serverTimestamp() as Timestamp,
+      });
 
       // checar por selecionadoFile
       if (selecionadoFile) {
