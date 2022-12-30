@@ -30,6 +30,7 @@ import TextInputs from "./PostForm/TextInputs";
 
 type FormCriarPostProps = {
   user: User;
+  comunidadeImagemURL?: string;
 };
 
 const formTabs: TabItem[] = [
@@ -75,6 +76,7 @@ const FormCriarPost: React.FC<FormCriarPostProps> = (props) => {
     // criar novo post object
     const { comunidadeId } = router.query;
     const novoPost: Post = {
+      comunidadeImagemURL: props.comunidadeImagemURL || "",
       comunidadeId: comunidadeId as string,
       criadorId: props.user?.uid,
       criadorDisplayName: props.user.email!.split("@")[0],

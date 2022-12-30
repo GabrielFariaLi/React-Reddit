@@ -26,6 +26,7 @@ import {
 import moment from "moment";
 import "moment/locale/pt-br";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 type PostItemProps = {
   post: Post;
@@ -39,6 +40,7 @@ type PostItemProps = {
   ) => {};
   onDeletePost: (post: Post) => Promise<boolean>;
   onSelectPost?: (post: Post) => void;
+  homePage?: boolean;
 };
 
 const PostItem: React.FC<PostItemProps> = (props) => {
@@ -127,6 +129,28 @@ const PostItem: React.FC<PostItemProps> = (props) => {
         <Stack spacing={1} p="10px">
           <Stack direction="row" spacing={0.6} align="center" fontSize="9pt">
             {/* HOMEPAGE CHECK */}
+            {props.homePage && (
+              <>
+                {props.post.comunidadeImagemURL ? (
+                  <Image
+                    src={props.post.comunidadeImagemURL}
+                    borderRadius="full"
+                    boxSize={"18px"}
+                    mr={2}
+                  />
+                ) : (
+                  <Icon as={FaReddit} fontSize="18pt" mr={1} color="blue.500" />
+                )}
+                <Link href={`r/${props.post.comunidadeId}`}>
+                  <Text
+                    onClick={(event) => event.stopPropagation()}
+                    fontWeight={700}
+                    _hover={{ textDecoration: "underline" }}
+                  >{`r/${props.post.comunidadeId}`}</Text>
+                </Link>
+                <Icon as={BsDot} color="gray.500" fontSize={8} />
+              </>
+            )}
             <Text>
               Postado por u/{props.post.criadorDisplayName}{" "}
               {moment(new Date(props.post.createdAt?.seconds * 1000))

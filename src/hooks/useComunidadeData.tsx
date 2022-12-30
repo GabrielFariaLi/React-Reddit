@@ -44,6 +44,7 @@ const useComunidadeData = () => {
     joinComunidade(comunidadeData);
   };
   const getMySnippets = async () => {
+    if (!user) return;
     setLoading(true);
     try {
       const snippetDocs = await getDocs(
@@ -55,6 +56,7 @@ const useComunidadeData = () => {
       setComunidadeStateValue((prev) => ({
         ...prev,
         mySnippets: snippets as SnippetComunidade[],
+        snippetsFetched: true,
       }));
     } catch (error: any) {
       console.log("getmysnippets error", error);
@@ -149,6 +151,7 @@ const useComunidadeData = () => {
       setComunidadeStateValue((prev) => ({
         ...prev,
         mySnippets: [],
+        snippetsFetched: false,
       }));
     }
     getMySnippets();

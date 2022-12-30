@@ -21,7 +21,14 @@ const submitPostPagina: React.FC = () => {
       <>
         <Box p="14px 0px" borderBottom={"1px solid"} borderColor="white">
           <Text>Criar um post</Text>
-          {user && <FormCriarPost user={user} />}
+          {user && (
+            <FormCriarPost
+              user={user}
+              comunidadeImagemURL={
+                comunidadeStateValue.comunidadeAtual?.imageURL
+              }
+            />
+          )}
         </Box>
       </>
       <>

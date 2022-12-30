@@ -1,4 +1,5 @@
 import { Flex, Image } from "@chakra-ui/react";
+import Link from "next/link";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { autenticacaoFirebase } from "../../firebase/clientApp";
@@ -21,7 +22,9 @@ const Navbar: React.FC = () => {
         width={{ base: "40px", md: "auto" }}
         mr={{ base: 0, md: 2 }}
       >
-        <Image src="/imgs/redditFace.svg" height="30px" />
+        <Link href="/">
+          <Image src="/imgs/redditFace.svg" height="30px" />
+        </Link>{" "}
         <Image
           src="/imgs/redditText.svg"
           height="46px"

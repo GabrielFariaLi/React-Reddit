@@ -22,7 +22,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { BsFillEyeFill, BsFillPersonFill } from "react-icons/bs";
@@ -30,6 +30,7 @@ import { HiLockClosed } from "react-icons/hi";
 import { useSetRecoilState } from "recoil";
 import { comunidadeState } from "../../../atoms/comunidadesAtom";
 import { autenticacaoFirebase, firestore } from "../../../firebase/clientApp";
+import useDiretorio from "../../../hooks/useDiretorio";
 
 type CriarComunidadeModalProps = {
   open: boolean;
@@ -45,6 +46,7 @@ const CriarComunidadeModal: React.FC<CriarComunidadeModalProps> = (props) => {
   const [tipoComunidade, setTipoComunidade] = useState("publico");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { toggleMenuOpen } = useDiretorio();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //nome de comunidade maior que 21 caracteres portanto não salvaremos
@@ -110,6 +112,9 @@ const CriarComunidadeModal: React.FC<CriarComunidadeModalProps> = (props) => {
           }
         );
       });
+      props.handleClose();
+      router.push(`r/${nomeComunidade}`);
+      toggleMenuOpen();
     } catch (error: any) {
       console.log("handleCriarComunidade error", error);
       setError(error.message);
