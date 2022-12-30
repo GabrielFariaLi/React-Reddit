@@ -22,10 +22,13 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { BsFillEyeFill, BsFillPersonFill } from "react-icons/bs";
 import { HiLockClosed } from "react-icons/hi";
+import { useSetRecoilState } from "recoil";
+import { comunidadeState } from "../../../atoms/comunidadesAtom";
 import { autenticacaoFirebase, firestore } from "../../../firebase/clientApp";
 
 type CriarComunidadeModalProps = {
@@ -34,6 +37,8 @@ type CriarComunidadeModalProps = {
 };
 
 const CriarComunidadeModal: React.FC<CriarComunidadeModalProps> = (props) => {
+  const router = useRouter();
+  const setSnippetState = useSetRecoilState(comunidadeState);
   const [user] = useAuthState(autenticacaoFirebase);
   const [nomeComunidade, setNomeComunidade] = useState("");
   const [caracteresRestantes, setCaracteresRestantes] = useState(21);
@@ -100,6 +105,7 @@ const CriarComunidadeModal: React.FC<CriarComunidadeModalProps> = (props) => {
           ),
           {
             comunidadeId: nomeComunidade,
+            imageURL: null,
             isModerator: true,
           }
         );
@@ -108,6 +114,12 @@ const CriarComunidadeModal: React.FC<CriarComunidadeModalProps> = (props) => {
       console.log("handleCriarComunidade error", error);
       setError(error.message);
     }
+    /*     setSnippetState((prev) => ({
+      ...prev,
+      mySnippets: [],
+    })); */
+    props.handleClose();
+    router.push(`/r/${nomeComunidade}`);
     setLoading(false);
   };
   return (

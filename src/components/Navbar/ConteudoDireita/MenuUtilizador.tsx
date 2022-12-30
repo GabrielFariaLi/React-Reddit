@@ -28,11 +28,8 @@ type MenuUtilizadorProps = {
 };
 
 const MenuUtilizador: React.FC<MenuUtilizadorProps> = (props) => {
-  const resetComunidadeState = useResetRecoilState(comunidadeState);
   const logout = async () => {
     await signOut(autenticacaoFirebase);
-    // limpar state da comunidade
-    resetComunidadeState();
   };
   const setAutenticacaoModalState = useSetRecoilState(autenticacaoModalState);
   return (

@@ -25,21 +25,34 @@ import {
 } from "react-icons/io5";
 import moment from "moment";
 import "moment/locale/pt-br";
+import { useRouter } from "next/router";
 
 type PostItemProps = {
   post: Post;
   userIsCreator: boolean;
   userVoteValue?: number;
-  onVote: () => {};
+  onVote: (
+    event: React.MouseEvent<SVGElement, MouseEvent>,
+    post: Post,
+    vote: number,
+    comunidadeId: string
+  ) => {};
   onDeletePost: (post: Post) => Promise<boolean>;
-  onSelectPost: () => void;
+  onSelectPost?: (post: Post) => void;
 };
 
 const PostItem: React.FC<PostItemProps> = (props) => {
   const [loadingImage, setLoadingImage] = useState(true);
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [error, setError] = useState(false);
-  const handleDelete = async () => {
+
+  const router = useRouter();
+  const singlePostPage = !props.onSelectPost;
+
+  const handleDelete = async (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
     setLoadingDelete(true);
     try {
       const success = await props.onDeletePost(props.post);
@@ -48,6 +61,9 @@ const PostItem: React.FC<PostItemProps> = (props) => {
       }
 
       console.log("post deletado com sucesso!");
+      if (singlePostPage) {
+        router.push(`/r/${props.post.comunidadeId}`);
+      }
     } catch (error: any) {
       console.log("handle delete error", error);
       setError(error.message);
@@ -57,20 +73,20 @@ const PostItem: React.FC<PostItemProps> = (props) => {
   return (
     <Flex
       border="1px solid"
-      borderColor={"gray.300"}
-      borderRadius={4}
-      _hover={{ borderColor: "gray.500" }}
-      cursor={"pointer"}
+      borderColor={singlePostPage ? "white" : "gray.300"}
+      borderRadius={singlePostPage ? "4px 4px 0px 0px" : "4px"}
+      _hover={{ borderColor: singlePostPage ? "none" : "gray.500" }}
+      cursor={singlePostPage ? "unset" : "pointer"}
       bg="white"
-      onClick={props.onSelectPost}
+      onClick={() => props.onSelectPost && props.onSelectPost(props.post)}
     >
       <Flex
         direction={"column"}
         align="center"
-        bg="gray.100"
+        bg={singlePostPage ? "none" : "gray.100"}
         p={2}
         width="40px"
-        borderRadius={4}
+        borderRadius={singlePostPage ? "0px" : "3px 0px 0px 3px"}
       >
         <Icon
           as={
@@ -80,7 +96,9 @@ const PostItem: React.FC<PostItemProps> = (props) => {
           }
           color={props.userVoteValue === 1 ? "brand.100" : "gray.400"}
           fontSize={22}
-          onClick={props.onVote}
+          onClick={(event) =>
+            props.onVote(event, props.post, 1, props.post.comunidadeId)
+          }
           cursor="pointer"
         />
 
@@ -93,7 +111,9 @@ const PostItem: React.FC<PostItemProps> = (props) => {
           }
           color={props.userVoteValue === -1 ? "#4379ff" : "gray.400"}
           fontSize={22}
-          onClick={props.onVote}
+          onClick={(event) =>
+            props.onVote(event, props.post, -1, props.post.comunidadeId)
+          }
           cursor="pointer"
         />
       </Flex>

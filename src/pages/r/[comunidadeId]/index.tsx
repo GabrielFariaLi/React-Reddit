@@ -28,7 +28,7 @@ const PaginaComunidade: React.FC<PaginaComunidadeProps> = (props) => {
       ...prev,
       comunidadeAtual: props.comunidadeData,
     }));
-  }, []);
+  }, [props.comunidadeData]);
   return (
     <>
       <Header comunidadeData={props.comunidadeData} />

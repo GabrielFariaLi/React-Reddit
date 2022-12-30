@@ -3,14 +3,19 @@ import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRecoilValue } from "recoil";
 import { comunidadeState } from "../../../atoms/comunidadesAtom";
+import SobreComunidade from "../../../components/Comunidade/SobreComunidade";
 import ConteudoPagina from "../../../components/Layout/ConteudoPagina";
 import FormCriarPost from "../../../components/Posts/FormCriarPost";
 import { autenticacaoFirebase } from "../../../firebase/clientApp";
+import useComunidadeData from "../../../hooks/useComunidadeData";
 
 const submitPostPagina: React.FC = () => {
   const [user] = useAuthState(autenticacaoFirebase);
-  const comunidadeStateValue = useRecoilValue(comunidadeState);
+  //const comunidadeStateValue = useRecoilValue(comunidadeState);
+
+  const { comunidadeStateValue } = useComunidadeData();
   console.log("comunidadeState", comunidadeStateValue);
+
   return (
     <ConteudoPagina>
       <>
@@ -20,7 +25,11 @@ const submitPostPagina: React.FC = () => {
         </Box>
       </>
       <>
-        <div>direita</div>
+        {comunidadeStateValue.comunidadeAtual && (
+          <SobreComunidade
+            comunidadeData={comunidadeStateValue.comunidadeAtual}
+          />
+        )}
       </>
     </ConteudoPagina>
   );

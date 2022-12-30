@@ -1,10 +1,12 @@
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   increment,
   writeBatch,
 } from "firebase/firestore";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -23,6 +25,7 @@ const useComunidadeData = () => {
   const setAutenticacaoModalState = useSetRecoilState(autenticacaoModalState);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const onJoinOrLeaveComunidade = (
     comunidadeData: Comunidade,
@@ -68,6 +71,7 @@ const useComunidadeData = () => {
       const newSnippet: SnippetComunidade = {
         comunidadeId: comunidadeData.id,
         imageURL: comunidadeData?.imageURL,
+        isModerator: user?.uid === comunidadeData.creatorId,
       };
 
       batch.set(
@@ -124,10 +128,39 @@ const useComunidadeData = () => {
     }
   };
 
+  const getComunidadeData = async (comunidadeId: string) => {
+    try {
+      const comunidadeDocRef = doc(firestore, "comunidades", comunidadeId);
+      const comunidadeDoc = await getDoc(comunidadeDocRef);
+      setComunidadeStateValue((prev) => ({
+        ...prev,
+        comunidadeAtual: {
+          id: comunidadeDoc.id,
+          ...comunidadeDoc.data(),
+        } as Comunidade,
+      }));
+    } catch (error) {
+      console.log("get comunidade data errro", error);
+    }
+  };
+
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setComunidadeStateValue((prev) => ({
+        ...prev,
+        mySnippets: [],
+      }));
+    }
     getMySnippets();
   }, [user]);
+
+  useEffect(() => {
+    const { comunidadeId } = router.query;
+
+    if (comunidadeId && !comunidadeStateValue.comunidadeAtual) {
+      getComunidadeData(comunidadeId as string);
+    }
+  }, [router.query, comunidadeStateValue.comunidadeAtual]);
 
   return {
     //data funcoes

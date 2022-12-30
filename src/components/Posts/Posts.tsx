@@ -3,7 +3,7 @@ import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Comunidade } from "../../atoms/comunidadesAtom";
-import { Post } from "../../atoms/postAtom";
+import { Post, postState } from "../../atoms/postAtom";
 import { autenticacaoFirebase, firestore } from "../../firebase/clientApp";
 import usePosts from "../../hooks/usePosts";
 import PostItem from "./PostItem";
@@ -50,7 +50,7 @@ const Posts: React.FC<PostsProps> = (props) => {
 
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [props.comunidadeData]);
   return (
     <>
       {loading ? (
@@ -62,7 +62,10 @@ const Posts: React.FC<PostsProps> = (props) => {
               key={item.id}
               post={item}
               userIsCreator={user?.uid === item.criadorId}
-              userVoteValue={undefined}
+              userVoteValue={
+                postStateValue.postVotes.find((vote) => vote.postId === item.id)
+                  ?.voteValue
+              }
               onVote={onVote}
               onSelectPost={onSelectPost}
               onDeletePost={onDeletPost}
