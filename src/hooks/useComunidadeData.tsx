@@ -70,11 +70,17 @@ const useComunidadeData = () => {
     //setLoading(true);
     try {
       const batch = writeBatch(firestore);
-      const newSnippet: SnippetComunidade = {
+      let newSnippet: SnippetComunidade = {
         comunidadeId: comunidadeData.id,
-        imageURL: comunidadeData?.imageURL,
         isModerator: user?.uid === comunidadeData.creatorId,
       };
+      if (comunidadeData.imageURL) {
+        newSnippet = {
+          comunidadeId: comunidadeData.id,
+          imageURL: comunidadeData?.imageURL,
+          isModerator: user?.uid === comunidadeData.creatorId,
+        };
+      }
 
       batch.set(
         doc(

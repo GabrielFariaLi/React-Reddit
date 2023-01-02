@@ -92,6 +92,7 @@ const Recomendacoes: React.FC = () => {
               );
               return (
                 <Flex
+                  key={item.id}
                   position={"relative"}
                   align="center"
                   fontSize="10pt"
