@@ -113,7 +113,7 @@ const CriarComunidadeModal: React.FC<CriarComunidadeModalProps> = (props) => {
         );
       });
       props.handleClose();
-      router.push(`r/${nomeComunidade}`);
+      router.push(`/r/${nomeComunidade}`);
       toggleMenuOpen();
     } catch (error: any) {
       console.log("handleCriarComunidade error", error);
